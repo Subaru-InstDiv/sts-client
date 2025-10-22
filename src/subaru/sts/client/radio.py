@@ -62,7 +62,8 @@ class Radio:
                     # Send quit command to disconnect from STSboard gracefully
                     sock.sendall(b'Q\n')
             else:
-                raise RuntimeError('Invalid response')
+                msg = 'Invalid response'
+                raise RuntimeError(msg)
         finally:
             sock.close()
 
@@ -100,7 +101,8 @@ class Radio:
                 #     # Send quit command to disconnect from STSboard gracefully
                 #     sock.sendall(b'Q\n')
             else:
-                raise RuntimeError('Invalid response')
+                msg = 'Invalid response'
+                raise RuntimeError(msg)
         finally:
             sock.close()
         return data
@@ -146,7 +148,7 @@ class Radio:
             packet = bytearray(size)
             pack_header(packet, size)
             pack_integer(packet, Radio._HEADER_SIZE, datum.value)
-        elif datum.format == Datum.FLOAT or datum.format == Datum.EXPONENT:
+        elif datum.format in (Datum.FLOAT, Datum.EXPONENT):
             size = Radio._HEADER_SIZE + Radio._FLOAT_SIZE
             packet = bytearray(size)
             pack_header(packet, size)
@@ -175,7 +177,8 @@ class Radio:
             pack_float(packet, Radio._HEADER_SIZE, datum.value[0])
             pack_text(packet, Radio._HEADER_SIZE + Radio._FLOAT_SIZE, datum.value[1])
         else:
-            raise RuntimeError(f'Invalid data type ({datum.format})')
+            msg = f'Invalid data type ({datum.format})'
+            raise RuntimeError(msg)
         return packet
 
     @staticmethod
@@ -201,13 +204,15 @@ class Radio:
         datum = Datum()
         size, datum.id, datum.format, datum.timestamp = unpack_header()
         if not size & 0x80:
-            raise RuntimeError(f'Invalid packet header ({size})')
+            msg = f'Invalid packet header ({size})'
+            raise RuntimeError(msg)
         size &= ~0x80
         if size != len(packet):
-            raise RuntimeError(f'Invalid packet size ({len(packet)})')
+            msg = f'Invalid packet size ({len(packet)})'
+            raise RuntimeError(msg)
         if datum.format == Datum.INTEGER:
             datum.value = unpack_integer(Radio._HEADER_SIZE)
-        elif datum.format == Datum.FLOAT or datum.format == Datum.EXPONENT:
+        elif datum.format in (Datum.FLOAT, Datum.EXPONENT):
             datum.value = unpack_float(Radio._HEADER_SIZE)
         elif datum.format == Datum.TEXT:
             datum.value = unpack_text(Radio._HEADER_SIZE, size)
@@ -222,7 +227,8 @@ class Radio:
                 unpack_text(Radio._HEADER_SIZE + Radio._FLOAT_SIZE, size)
             )
         else:
-            raise RuntimeError(f'Invalid data type ({datum.format})')
+            msg = f'Invalid data type ({datum.format})'
+            raise RuntimeError(msg)
         return datum
 
     @staticmethod
@@ -243,7 +249,8 @@ class Radio:
             buffer_ = sock.recv(size - offset, flags)
             size_ = len(buffer_)
             if not size_:
-                raise RuntimeError('Connection closed by peer')
+                msg = 'Connection closed by peer'
+                raise RuntimeError(msg)
             buffer[offset:offset + size_] = buffer_
             offset += size_
         return buffer

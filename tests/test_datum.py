@@ -14,7 +14,7 @@ class DatumTest(unittest.TestCase):
         # Long text data (62*3 bytes)
         text = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' * 3
         timestamp = int(time.time())
-        data = [
+        return [
             Datum.Integer(id=1090, timestamp=timestamp, value=1),
             Datum.Float(id=1091, timestamp=timestamp, value=1.0),
             Datum.Text(id=1092, timestamp=timestamp, value=text),
@@ -22,7 +22,6 @@ class DatumTest(unittest.TestCase):
             Datum.FloatWithText(id=1094, timestamp=timestamp, value=(1.0, text)),
             Datum.Exponent(id=1095, timestamp=timestamp, value=1.0),
         ]
-        return data
 
     @staticmethod
     def create_ids():

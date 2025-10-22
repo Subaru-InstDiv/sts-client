@@ -1,6 +1,8 @@
 import unittest
 
+import pytest
 from subaru.sts.client import Datum, Radio
+
 from .test_datum import DatumTest
 
 
@@ -16,7 +18,7 @@ class RadioTest(unittest.TestCase):
         """Test the pack static method with an invalid data type."""
 
         datum = Datum(id=0, format=6)
-        with self.assertRaises(RuntimeError):
+        with pytest.raises(RuntimeError):
             Radio.pack(datum)
 
     def test_unpack_method_with_invalid_packet_size(self):
@@ -24,7 +26,7 @@ class RadioTest(unittest.TestCase):
 
         packet = Radio.pack(Datum.Integer(id=0, timestamp=0, value=0))
         packet[0:1] = bytes([18 | 0x80])
-        with self.assertRaises(RuntimeError):
+        with pytest.raises(RuntimeError):
             Radio.unpack(packet)
 
     def test_unpack_method_with_invalid_data_type(self):
@@ -32,7 +34,7 @@ class RadioTest(unittest.TestCase):
 
         packet = Radio.pack(Datum.Integer(id=0, timestamp=0, value=0))
         packet[5:6] = bytes([6])
-        with self.assertRaises(RuntimeError):
+        with pytest.raises(RuntimeError):
             Radio.unpack(packet)
 
     def test_round_trip(self):
