@@ -1,33 +1,32 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "STSpy"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Small Python library for communicating with the Subaru Telescope STS board (\"STS radio\")."
 readme = "README.md"
 requires-python = ">=3.7"
 authors = [
-  { name = "Subaru Telescope" }
+    { name = "Subaru Telescope" }
 ]
 keywords = ["Subaru", "telescope", "STS", "radio", "TCP", "binary-protocol"]
 classifiers = [
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3 :: Only",
-  "Operating System :: OS Independent",
-  "License :: Other/Proprietary License",
-  "Topic :: Scientific/Engineering :: Astronomy",
-  "Topic :: Communications",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: OS Independent",
+    "License :: Other/Proprietary License",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Communications",
 ]
 dependencies = []
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
-namespaces = true
 
 # Hatch configuration: environments and optional build targets
 [tool.hatch.envs.default]
@@ -38,10 +37,10 @@ dependencies = []
 test = "python -m unittest -v"
 # Run only offline/unit tests that do not require network access
 test-offline = [
-  "python -m unittest -v test_STSpy.DatumTest",
-  "python -m unittest -v test_STSpy.RadioTest.test_pack_method_with_invalid_data_type",
-  "python -m unittest -v test_STSpy.RadioTest.test_unpack_method_with_invalid_packet_size",
-  "python -m unittest -v test_STSpy.RadioTest.test_unpack_method_with_invalid_data_type",
+    "python -m unittest -v test_STSpy.DatumTest",
+    "python -m unittest -v test_STSpy.RadioTest.test_pack_method_with_invalid_data_type",
+    "python -m unittest -v test_STSpy.RadioTest.test_unpack_method_with_invalid_packet_size",
+    "python -m unittest -v test_STSpy.RadioTest.test_unpack_method_with_invalid_data_type",
 ]
 
 # If using Hatch to build, these targets help define package contents.
@@ -51,3 +50,8 @@ include = ["src", "README.md", "pyproject.toml", "test_STSpy.py"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/sts"]
+
+[tool.setuptools_scm]
+# Enable automatic versioning from Git tags/commits.
+# If Git metadata is unavailable (e.g., in a source archive), use a safe fallback version.
+fallback_version = "0.1.0"
