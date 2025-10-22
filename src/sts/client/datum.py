@@ -3,7 +3,7 @@
 ###############################################################################
 
 
-class Datum(object):
+class Datum:
     """A class to represent STS *datum*."""
 
     # Data types (formats)
@@ -31,10 +31,7 @@ class Datum(object):
 
     def __repr__(self):
 
-        return '{}(id={}, format={}, timestamp={}, value={})'.format(
-            self.__class__.__name__,
-            repr(self.id), repr(self.format), repr(self.timestamp), repr(self.value)
-        )
+        return f'{self.__class__.__name__}(id={self.id!r}, format={self.format!r}, timestamp={self.timestamp!r}, value={self.value!r})'
 
     @classmethod
     def Integer(cls, id=None, timestamp=0, value=0):

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import unittest
 import time
-from STSpy import Datum, Radio
+import unittest
+
+from sts.client import Datum, Radio
 
 
 class DatumTest(unittest.TestCase):
@@ -56,7 +57,7 @@ class RadioTest(unittest.TestCase):
         datum = Datum(id=0, format=6)
         with self.assertRaises(RuntimeError):
             Radio.pack(datum)
-    
+
     def test_unpack_method_with_invalid_packet_size(self):
         """Test the unpack static method with an invalid packet size."""
 
@@ -72,7 +73,7 @@ class RadioTest(unittest.TestCase):
         packet[5:6] = bytes([6])
         with self.assertRaises(RuntimeError):
             Radio.unpack(packet)
-    
+
     def test_round_trip(self):
         """Test if data round-trips through the pack and unpack static methods."""
 
