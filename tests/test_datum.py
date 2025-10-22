@@ -1,7 +1,7 @@
 import time
 import unittest
 
-from sts.client import Datum
+from subaru.sts.client import Datum
 
 
 class DatumTest(unittest.TestCase):

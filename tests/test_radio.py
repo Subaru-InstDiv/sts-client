@@ -1,6 +1,6 @@
 import unittest
 
-from sts.client import Datum, Radio
+from subaru.sts.client import Datum, Radio
 from .test_datum import DatumTest
 
 

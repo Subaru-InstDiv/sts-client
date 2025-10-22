@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sts-client"
+name = "subaru-sts-client"
 dynamic = ["version"]
 description = "Small Python library for communicating with the Subaru Telescope STS board (\"STS radio\")."
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -65,7 +65,7 @@ include = ["src", "README.md", "pyproject.toml", "tests"]
 
 [tool.hatch.build.targets.wheel]
 # Specify top-level package names when using hatchling
-packages = ["sts"]
+packages = ["subaru"]
 
 [tool.setuptools_scm]
 # Enable automatic versioning from Git tags/commits.
@@ -79,7 +79,7 @@ target-version = ["py312"]
 [tool.isort]
 profile = "black"
 line_length = 110
-known_first_party = ["sts"]
+known_first_party = ["subaru"]
 
 [tool.pydocstyle]
 convention = "numpy"
