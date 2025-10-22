@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "STSpy"
+version = "0.1.0"
+description = "Small Python library for communicating with the Subaru Telescope STS board (\"STS radio\")."
+readme = "README.md"
+requires-python = ">=3.7"
+authors = [
+  { name = "Subaru Telescope" }
+]
+keywords = ["Subaru", "telescope", "STS", "radio", "TCP", "binary-protocol"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: OS Independent",
+  "License :: Other/Proprietary License",
+  "Topic :: Scientific/Engineering :: Astronomy",
+  "Topic :: Communications",
+]
+dependencies = []
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
+
+# Hatch configuration: environments and optional build targets
+[tool.hatch.envs.default]
+dependencies = []
+
+[tool.hatch.envs.default.scripts]
+# Run all tests (note: some tests may attempt live network I/O)
+test = "python -m unittest -v"
+# Run only offline/unit tests that do not require network access
+test-offline = [
+  "python -m unittest -v test_STSpy.DatumTest",
+  "python -m unittest -v test_STSpy.RadioTest.test_pack_method_with_invalid_data_type",
+  "python -m unittest -v test_STSpy.RadioTest.test_unpack_method_with_invalid_packet_size",
+  "python -m unittest -v test_STSpy.RadioTest.test_unpack_method_with_invalid_data_type",
+]
+
+# If using Hatch to build, these targets help define package contents.
+# They are ignored by setuptools but recognized by hatchling if you later switch backends.
+[tool.hatch.build.targets.sdist]
+include = ["src", "README.md", "pyproject.toml", "test_STSpy.py"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sts"]
