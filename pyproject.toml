@@ -29,6 +29,7 @@ dev = [
     "black>=24.0.0",
     "isort>=5.13.0",
     "pydocstyle>=6.3.0",
+    "pytest>=8.4.0",
     "hatch>=1.9.0",
 ]
 
@@ -47,16 +48,12 @@ Homepage = "https://github.com/Subaru-InstDiv/STSpy"
 Repository = "https://github.com/Subaru-InstDiv/STSpy.git"
 
 [tool.hatch.envs.default.scripts]
-# Run all tests (note: some tests may attempt live network I/O)
-test = "python -m unittest -v"
+# Run all tests with pytest (note: some tests may attempt live network I/O)
+test = "pytest -v"
 # Run only offline/unit tests that do not require network access
 # These exclude tests that perform live network I/O (e.g., Radio.transmit/receive)
-test-offline = [
-    "python -m unittest -v tests.test_datum.DatumTest",
-    "python -m unittest -v tests.test_radio.RadioTest.test_pack_method_with_invalid_data_type",
-    "python -m unittest -v tests.test_radio.RadioTest.test_unpack_method_with_invalid_packet_size",
-    "python -m unittest -v tests.test_radio.RadioTest.test_unpack_method_with_invalid_data_type",
-]
+# We exclude tests by name using a -k expression.
+test-offline = "pytest -v -k 'not transmit_method and not receive_method'"
 
 # If using Hatch to build, these targets help define package contents.
 # They are ignored by setuptools but recognized by hatchling if you later switch backends.
@@ -83,3 +80,9 @@ known_first_party = ["subaru"]
 
 [tool.pydocstyle]
 convention = "numpy"
+
+[tool.pytest.ini_options]
+# Discover tests under the tests/ directory and show extra summary info for skipped/failed
+# tests. Add more options here as needed by the project.
+testpaths = ["tests"]
+addopts = ["-ra"]
