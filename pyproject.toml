@@ -3,11 +3,11 @@ requires = ["setuptools>=61.0", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "STSpy"
+name = "sts-client"
 dynamic = ["version"]
 description = "Small Python library for communicating with the Subaru Telescope STS board (\"STS radio\")."
-readme = "README.md"
-requires-python = ">=3.7"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.12"
 authors = [
     { name = "Subaru Telescope" }
 ]
@@ -15,12 +15,22 @@ keywords = ["Subaru", "telescope", "STS", "radio", "TCP", "binary-protocol"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
     "Operating System :: OS Independent",
     "License :: Other/Proprietary License",
     "Topic :: Scientific/Engineering :: Astronomy",
     "Topic :: Communications",
 ]
 dependencies = []
+
+[project.optional-dependencies]
+# Developer convenience tools; not required at runtime.
+dev = [
+    "black>=24.0.0",
+    "isort>=5.13.0",
+    "pydocstyle>=6.3.0",
+    "hatch>=1.9.0",
+]
 
 [tool.setuptools]
 package-dir = { "" = "src" }
@@ -31,6 +41,10 @@ where = ["src"]
 # Hatch configuration: environments and optional build targets
 [tool.hatch.envs.default]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/Subaru-InstDiv/STSpy"
+Repository = "https://github.com/Subaru-InstDiv/STSpy.git"
 
 [tool.hatch.envs.default.scripts]
 # Run all tests (note: some tests may attempt live network I/O)
@@ -49,9 +63,22 @@ test-offline = [
 include = ["src", "README.md", "pyproject.toml", "test_STSpy.py"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/sts"]
+# Specify top-level package names when using hatchling
+packages = ["sts"]
 
 [tool.setuptools_scm]
 # Enable automatic versioning from Git tags/commits.
 # If Git metadata is unavailable (e.g., in a source archive), use a safe fallback version.
 fallback_version = "0.1.0"
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 110
+known_first_party = ["sts"]
+
+[tool.pydocstyle]
+convention = "numpy"
