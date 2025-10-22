@@ -6,12 +6,15 @@ build-backend = "setuptools.build_meta"
 name = "subaru-sts-client"
 dynamic = ["version"]
 description = "Small Python library for communicating with the Subaru Telescope STS board (\"STS radio\")."
+authors = [
+    { name = "Subaru Telescope Instrument Division" },
+]
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"
 authors = [
     { name = "Subaru Telescope" }
 ]
-keywords = ["Subaru", "telescope", "STS", "radio", "TCP", "binary-protocol"]
+keywords = ["Subaru", "telescope", "STS", "radio"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
