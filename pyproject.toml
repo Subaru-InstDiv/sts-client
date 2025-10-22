@@ -50,17 +50,18 @@ Repository = "https://github.com/Subaru-InstDiv/STSpy.git"
 # Run all tests (note: some tests may attempt live network I/O)
 test = "python -m unittest -v"
 # Run only offline/unit tests that do not require network access
+# These exclude tests that perform live network I/O (e.g., Radio.transmit/receive)
 test-offline = [
-    "python -m unittest -v test_STSpy.DatumTest",
-    "python -m unittest -v test_STSpy.RadioTest.test_pack_method_with_invalid_data_type",
-    "python -m unittest -v test_STSpy.RadioTest.test_unpack_method_with_invalid_packet_size",
-    "python -m unittest -v test_STSpy.RadioTest.test_unpack_method_with_invalid_data_type",
+    "python -m unittest -v tests.test_datum.DatumTest",
+    "python -m unittest -v tests.test_radio.RadioTest.test_pack_method_with_invalid_data_type",
+    "python -m unittest -v tests.test_radio.RadioTest.test_unpack_method_with_invalid_packet_size",
+    "python -m unittest -v tests.test_radio.RadioTest.test_unpack_method_with_invalid_data_type",
 ]
 
 # If using Hatch to build, these targets help define package contents.
 # They are ignored by setuptools but recognized by hatchling if you later switch backends.
 [tool.hatch.build.targets.sdist]
-include = ["src", "README.md", "pyproject.toml", "test_STSpy.py"]
+include = ["src", "README.md", "pyproject.toml", "tests"]
 
 [tool.hatch.build.targets.wheel]
 # Specify top-level package names when using hatchling
