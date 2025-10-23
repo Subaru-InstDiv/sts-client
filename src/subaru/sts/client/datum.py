@@ -49,7 +49,8 @@ class Datum:
             ValueError: If format is invalid or value type doesn't match format
         """
         if format not in DatumFormat.__members__.values():
-            raise ValueError(f"Invalid format: {format}. Must be a valid DatumFormat value.")
+            valid_formats = ', '.join(f"{name} ({member.value})" for name, member in DatumFormat.__members__.items())
+            raise ValueError(f"Invalid format: {format}. Must be one of: {valid_formats}")
 
         self.id = id
         self.format = format
