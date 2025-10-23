@@ -1,6 +1,6 @@
 # STSpy
 
-[![Offline Tests](https://github.com/Subaru-InstDiv/sts-client/actions/workflows/python-tests.yml/badge.svg)](https://github.com/Subaru-InstDiv/sts-client/actions/workflows/python-tests.yml)
+[![Tests](https://github.com/Subaru-InstDiv/sts-client/actions/workflows/python-tests.yml/badge.svg)](https://github.com/Subaru-InstDiv/sts-client/actions/workflows/python-tests.yml)
 [![codecov](https://codecov.io/gh/Subaru-InstDiv/STSpy/branch/main/graph/badge.svg)](https://codecov.io/gh/Subaru-InstDiv/STSpy)
 
 ## Overview
