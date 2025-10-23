@@ -10,6 +10,7 @@
 - Language: Python 3 (requires Python >= 3.12).
 - Standard library only: socket, struct, time, unittest. No third-party runtime dependencies.
 - Packaging/build: pyproject.toml using setuptools (with setuptools-scm for versioning).
+- Development tools: ruff (formatter and linter), pytest (testing), hatch (environment management).
 
 ## Project structure
 - src/
@@ -33,6 +34,8 @@
   - python -m pip install .
 - Editable/development install:
   - python -m pip install -e .
+- Development install with dev tools:
+  - python -m pip install -e ".[dev]"
 - Package name (when published): `subaru-sts-client`.
 
 ## Usage
@@ -57,46 +60,59 @@
 
 ## Configuration
 - Radio defaults (as defined in src/subaru/sts/client/radio.py):
-  - HOST: 133.40.160.114
+  - HOST: sts
   - PORT: 9001
   - TIMEOUT: 5.0 seconds
 - You can override these via the constructor:
   - Radio(host='example.org', port=9001, timeout=2.0)
 
-## Entry points and scripts
-- This repository provides a Python package intended to be imported by other code.
-- No console scripts or CLI entry points are defined at this time. Usage is via Python imports as shown above.
-
 ## Tests
-- The test suite uses unittest and resides under the tests/ directory.
 - Some tests are pure unit tests (packing/unpacking, factory methods), and others perform live network I/O against the default STS HOST/PORT.
-- Running all tests as-is may attempt to connect to 133.40.160.114:9001 and may fail or hang if not reachable.
+- Running all tests as-is may attempt to connect to sts:9001 and may fail or hang if not reachable.
 
 ### Run tests
 - Run all tests (may attempt network access):
-  - python -m unittest -v
+  - pytest -v
+  - or: python -m pytest -v
 - Run only offline/unit tests (examples):
-  - python -m unittest -v tests.test_datum.DatumTest
-  - python -m unittest -v tests.test_radio.RadioTest.test_pack_method_with_invalid_data_type
-  - python -m unittest -v tests.test_radio.RadioTest.test_unpack_method_with_invalid_packet_size
-  - python -m unittest -v tests.test_radio.RadioTest.test_unpack_method_with_invalid_data_type
+  - pytest -v -k 'not transmit_method and not receive_method'
 - If you use Hatch, equivalent scripts are defined:
   - hatch run test
   - hatch run test-offline
+
+### Code quality and formatting
+- This project uses ruff for both linting and code formatting.
+- Ruff configuration is defined in pyproject.toml and follows:
+  - Line length: 100 characters
+  - Target: Python 3.12
+  - Docstring convention: numpy
+
+#### Hatch commands for code quality:
+- Format code:
+  - hatch run format
+- Check formatting without changes:
+  - hatch run format-check
+- Lint code:
+  - hatch run lint
+- Lint and auto-fix issues:
+  - hatch run lint-fix
+- Run all quality checks (lint + format check):
+  - hatch run check
+
+#### Manual ruff commands (if not using Hatch):
+- Format code:
+  - ruff format .
+- Check formatting:
+  - ruff format --check .
+- Lint code:
+  - ruff check .
+- Lint and auto-fix:
+  - ruff check --fix .
+
 - If you wish to run integration tests that hit the live STS server, ensure network connectivity and that the HOST/PORT are correct or pass custom values when constructing Radio in your own tests.
 
 ## Development notes
-- Coding style: straightforward Python 3 with standard library only.
 - Network protocol: The Radio class uses struct to pack/unpack a specific binary protocol header and payload for STS. See radio.py for details.
 
 ## Known limitations
-- Packaging metadata is provided via pyproject.toml; no setup.cfg/setup.py files are used.
 - Integration tests depend on external network availability and an accessible STS board.
-
-## License
-- Copyright (c) 2018 Subaru Telescope.
-- A LICENSE file is not included in the repository.
-- TODO: Add an explicit license file (e.g., MIT, BSD-3-Clause, Apache-2.0) or the appropriate Subaru Telescope license text.
-
-## Attribution
-- Original copyright notice retained in source files.
