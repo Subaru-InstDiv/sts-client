@@ -1,5 +1,7 @@
 # STSpy
 
+[![codecov](https://codecov.io/gh/Subaru-InstDiv/STSpy/branch/main/graph/badge.svg)](https://codecov.io/gh/Subaru-InstDiv/STSpy)
+
 ## Overview
 - STSpy is a small Python library for communicating with the Subaru Telescope STS board ("STS radio").
 - It provides two core classes:

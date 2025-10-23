@@ -21,15 +21,20 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install package
+      - name: Install hatch
         run: |
           python -m pip install --upgrade pip
-          pip install .
+          pip install hatch
 
-      - name: Run offline tests (unittest)
+      - name: Run tests with coverage
         run: |
-          python -m unittest -v \
-            tests.test_datum.DatumTest \
-            tests.test_radio.RadioTest.test_pack_method_with_invalid_data_type \
-            tests.test_radio.RadioTest.test_unpack_method_with_invalid_packet_size \
-            tests.test_radio.RadioTest.test_unpack_method_with_invalid_data_type
+          hatch run test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true

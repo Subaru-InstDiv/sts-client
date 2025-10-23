@@ -23,14 +23,6 @@ classifiers = [
 ]
 dependencies = []
 
-[project.optional-dependencies]
-# Developer convenience tools; not required at runtime.
-dev = [
-    "ruff>=0.8.0",
-    "pytest>=8.4.0",
-    "hatch>=1.9.0",
-]
-
 [tool.setuptools]
 package-dir = { "" = "src" }
 
@@ -39,19 +31,27 @@ where = ["src"]
 
 # Hatch configuration: environments and optional build targets
 [tool.hatch.envs.default]
-dependencies = []
+dependencies = [
+    "pytest>=8.4.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.8.0",
+]
+
+[tool.hatch.envs.hatch-test]
+dependencies = [
+    "pytest>=8.4.0",
+    "pytest-cov>=6.0.0",
+]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.12", "3.13"]
 
 [project.urls]
 Homepage = "https://github.com/Subaru-InstDiv/STSpy"
 Repository = "https://github.com/Subaru-InstDiv/STSpy.git"
 
 [tool.hatch.envs.default.scripts]
-# Run all tests with pytest (note: some tests may attempt live network I/O)
-test = "pytest -v"
-# Run only offline/unit tests that do not require network access
-# These exclude tests that perform live network I/O (e.g., Radio.transmit/receive)
-# We exclude tests by name using a -k expression.
-test-offline = "pytest -v -k 'not transmit_method and not receive_method'"
+test = "pytest"
 # Format code with ruff
 format = "ruff format"
 # Check formatting without making changes
@@ -131,3 +131,32 @@ convention = "numpy"
 
 [tool.ruff.lint.isort]
 known-first-party = ["subaru"]
+
+[tool.pytest.ini_options]
+# Pytest configuration for coverage
+testpaths = ["tests"]
+addopts = [
+    "-v",
+    "--cov=subaru",
+    "--cov-report=xml",
+    "--cov-report=term-missing",
+]
+
+[tool.coverage.run]
+# Coverage.py configuration
+source = ["subaru"]
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/site-packages/*",
+]
+
+[tool.coverage.report]
+# Show missing line numbers in coverage report
+show_missing = true
+# Fail if coverage is below this percentage
+fail_under = 80
+
+[tool.coverage.xml]
+# Output file for XML coverage report (used by Codecov)
+output = "coverage.xml"
