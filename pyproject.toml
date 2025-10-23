@@ -1,0 +1,162 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "subaru-sts-client"
+dynamic = ["version"]
+description = "Small Python library for communicating with the Subaru Telescope STS board (\"STS radio\")."
+authors = [
+    { name = "Subaru Telescope Instrument Division" },
+]
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.12"
+keywords = ["Subaru", "telescope", "STS", "radio"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "License :: Other/Proprietary License",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Communications",
+]
+dependencies = []
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# Hatch configuration: environments and optional build targets
+[tool.hatch.envs.default]
+dependencies = [
+    "pytest>=8.4.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.8.0",
+]
+
+[tool.hatch.envs.hatch-test]
+dependencies = [
+    "pytest>=8.4.0",
+    "pytest-cov>=6.0.0",
+]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.12", "3.13"]
+
+[project.urls]
+Homepage = "https://github.com/Subaru-InstDiv/STSpy"
+Repository = "https://github.com/Subaru-InstDiv/STSpy.git"
+
+[tool.hatch.envs.default.scripts]
+test = "pytest"
+# Format code with ruff
+format = "ruff format"
+# Check formatting without making changes
+format-check = "ruff format --check"
+# Lint code with ruff
+lint = "ruff check"
+# Lint and fix auto-fixable issues
+lint-fix = "ruff check --fix"
+# Run all quality checks (linting + format check)
+check = ["lint", "format-check"]
+
+# If using Hatch to build, these targets help define package contents.
+# They are ignored by setuptools but recognized by hatchling if you later switch backends.
+[tool.hatch.build.targets.sdist]
+include = ["src", "README.md", "pyproject.toml", "tests"]
+
+[tool.hatch.build.targets.wheel]
+# Specify top-level package names when using hatchling
+packages = ["subaru"]
+
+[tool.setuptools_scm]
+# Enable automatic versioning from Git tags/commits.
+# If Git metadata is unavailable (e.g., in a source archive), use a safe fallback version.
+fallback_version = "0.1.0"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.format]
+# Use double quotes for strings
+quote-style = "double"
+# Use spaces for indentation
+indent-style = "space"
+
+[tool.ruff.lint]
+# Enable pycodestyle (E, W), pyflakes (F), isort (I), numpy docstring (D), and other useful rules
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "D",    # pydocstyle
+    "UP",   # pyupgrade
+    "N",    # pep8-naming
+    "B",    # flake8-bugbear
+    "A",    # flake8-builtins
+    "C4",   # flake8-comprehensions
+    "DTZ",  # flake8-datetimez
+    "EM",   # flake8-errmsg
+    "ISC",  # flake8-implicit-str-concat
+    "ICN",  # flake8-import-conventions
+    "PIE",  # flake8-pie
+    "T20",  # flake8-print
+    "PT",   # flake8-pytest-style
+    "Q",    # flake8-quotes
+    "RSE",  # flake8-raise
+    "RET",  # flake8-return
+    "SIM",  # flake8-simplify
+    "TID",  # flake8-tidy-imports
+    "ARG",  # flake8-unused-arguments
+    "PTH",  # flake8-use-pathlib
+    "ERA",  # eradicate
+    "PL",   # pylint
+    "TRY",  # tryceratops
+    "RUF",  # ruff-specific rules
+]
+ignore = ["EM101", "EM102", "TRY003", "UP038"]
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore certain rules in test files
+"tests/**/*.py" = ["D100", "D103"]
+
+[tool.ruff.lint.pydocstyle]
+# Use numpy docstring convention
+convention = "numpy"
+
+[tool.ruff.lint.isort]
+known-first-party = ["subaru"]
+
+[tool.pytest.ini_options]
+# Pytest configuration for coverage
+testpaths = ["tests"]
+addopts = [
+    "-v",
+    "--cov=subaru",
+    "--cov-report=xml",
+    "--cov-report=term-missing",
+]
+
+[tool.coverage.run]
+# Coverage.py configuration
+source = ["subaru"]
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/site-packages/*",
+]
+
+[tool.coverage.report]
+# Show missing line numbers in coverage report
+show_missing = true
+# Fail if coverage is below this percentage
+fail_under = 80
+
+[tool.coverage.xml]
+# Output file for XML coverage report (used by Codecov)
+output = "coverage.xml"
