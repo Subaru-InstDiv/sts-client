@@ -655,7 +655,7 @@ class TestRadioRecvPacket:
 
             result = Radio._recv_packet(mock_socket)
 
-            # Verify _recn was called correctly
+            # Verify _recvn was called correctly
             assert mock_recvn.call_count == 2
             # First call peeks at header
             assert mock_recvn.call_args_list[0] == call(mock_socket, 1, socket.MSG_PEEK)
