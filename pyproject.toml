@@ -23,6 +23,13 @@ classifiers = [
 ]
 dependencies = []
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.8.0",
+]
+
 [tool.setuptools]
 package-dir = { "" = "src" }
 
@@ -31,17 +38,10 @@ where = ["src"]
 
 # Hatch configuration: environments and optional build targets
 [tool.hatch.envs.default]
-dependencies = [
-    "pytest>=8.4.0",
-    "pytest-cov>=6.0.0",
-    "ruff>=0.8.0",
-]
+features = ["dev"]
 
 [tool.hatch.envs.hatch-test]
-dependencies = [
-    "pytest>=8.4.0",
-    "pytest-cov>=6.0.0",
-]
+features = ["dev"]
 
 [[tool.hatch.envs.hatch-test.matrix]]
 python = ["3.12", "3.13"]
